@@ -16,6 +16,17 @@ func GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
+// GetUserById handles GET /users/:id request
+func GetUserById(c *gin.Context) {
+	var user models.User
+	if err := database.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": user})
+}
+
 // CreateUser handles POST /users request
 func CreateUser(c *gin.Context) {
 	var input models.User
@@ -34,17 +45,21 @@ func CreateUser(c *gin.Context) {
 func UpdateUser(c *gin.Context) {
 	var user models.User
 	if err := database.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found!"})
 		return
 	}
 
-	var input models.User
+	var input struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	database.DB.Model(&user).Updates(input)
+	// Use Map or explicit fields to avoid GORM issues with zero values or unintended updates
+	database.DB.Model(&user).Updates(models.User{Name: input.Name, Email: input.Email})
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }

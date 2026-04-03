@@ -1,54 +1,73 @@
-# Golang Backend Project
+# Fullstack User Management Project
 
-This is a simple Golang backend project using Gin and GORM with SQLite.
+This project features a Golang REST API backend and an Angular frontend.
 
 ## Project Structure
 
-- `cmd/server/`: Main application entry point.
-- `internal/database/`: Database initialization and connection.
-- `internal/handlers/`: API request handlers.
-- `internal/models/`: Database models.
+- **backend/**: Golang REST API using Gin and GORM.
+  - `cmd/server/`: Main application entry point.
+  - `internal/database/`: Database initialization and connection (SQLite).
+  - `internal/handlers/`: API request handlers.
+  - `internal/models/`: Database models.
+- **frontend/**: Angular application using Standalone Components and RxJS.
+  - `src/app/core/`: Services for API communication.
+  - `src/app/features/`: UI components (User list, User form).
+  - `src/app/models/`: Frontend data models.
+
+---
 
 ## How to Run
 
-1. Make sure you have Go installed (Go 1.26+ recommended).
+### 1. Prerequisites
+- [Go](https://go.dev/doc/install) (1.20+)
+- [Node.js](https://nodejs.org/) (latest LTS)
+- [npm](https://www.npmjs.com/) (latest)
+- [Angular CLI](https://angular.dev/tools/cli) (optional, `npx` will be used if not installed)
+
+### 2. Run the Backend
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
 2. Install dependencies:
    ```bash
    go mod tidy
    ```
-3. Run the server:
+3. Start the server:
    ```bash
    go run cmd/server/main.go
    ```
-4. The server will start on `http://localhost:8080`.
+4. The backend will be available at `http://localhost:8080`.
 
-## API Endpoints
+### 3. Run the Frontend
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+4. Open your browser and go to `http://localhost:4200`.
 
-### 1. Get all users
-**GET** `/users`
-```bash
-curl http://localhost:8080/users
-```
+---
 
-### 2. Create a user
-**POST** `/users`
-```bash
-curl -X POST http://localhost:8080/users \
-     -H "Content-Type: application/json" \
-     -d '{"name": "John Doe", "email": "john@example.com"}'
-```
+## API Endpoints (Backend)
 
-### 3. Update a user
-**PUT** `/users/:id`
-```bash
-curl -X PUT http://localhost:8080/users/1 \
-     -H "Content-Type: application/json" \
-     -d '{"name": "John Updated"}'
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/users` | Fetch all users |
+| GET    | `/users/:id` | Fetch a single user by ID |
+| POST   | `/users` | Create a new user |
+| PUT    | `/users/:id` | Update an existing user |
+
+---
 
 ## Features
-
-- **SQLite Database**: A simple file-based database (`gorm.db`) will be created automatically.
-- **Auto Migration**: Database schema is automatically updated on server start.
-- **Gin Framework**: Lightweight and fast HTTP web framework.
-- **GORM**: Powerful Object-Relational Mapper for Go.
+- **Frontend**: Angular standalone components, reactive forms, RxJS (Observable/pipe/map), and environment-based configuration.
+- **Backend**: Gin framework, GORM (SQLite), and CORS middleware configured for `http://localhost:4200`.
+- **Database**: SQLite database (`backend/gorm.db`) with auto-migration of the User model.
