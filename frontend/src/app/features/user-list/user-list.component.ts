@@ -27,11 +27,11 @@ import { User } from '../../models/user.model';
         </thead>
         <tbody>
           <tr *ngFor="let user of users$ | async">
-            <td>{{ user.ID }}</td>
+            <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>
-              <button [routerLink]="['/users/edit',user.ID]" class="btn btn-secondary">Edit</button>
+              <button [routerLink]="['/users/edit',user.id]" class="btn btn-secondary">Edit</button>
             </td>
           </tr>
         </tbody>
