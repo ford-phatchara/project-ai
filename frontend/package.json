@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "durian-farm-manager",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -17,12 +17,16 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@tailwindcss/postcss": "^4.2.4",
+    "chart.js": "^4.5.1",
+    "postcss": "^8.5.10",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.2.4",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.2.6",
-    "@angular/cli": "^21.2.6",
+    "@angular/build": "^21.2.7",
+    "@angular/cli": "^21.2.7",
     "@angular/compiler-cli": "^21.2.0",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",

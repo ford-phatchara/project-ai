@@ -3,11 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "87fa77d8-992a-4b97-9215-fee050aa8128"
+    "analytics": "d1d4aeff-14f2-4ec5-8cef-7a1a1723ebaa"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
+    "durian-farm-manager": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -26,7 +26,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css"
             ]
           },
           "configurations": {
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "durian-farm-manager:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "durian-farm-manager:build:development"
             }
           },
           "defaultConfiguration": "development"
