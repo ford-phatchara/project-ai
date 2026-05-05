@@ -9,6 +9,15 @@ import (
 	"github.com/phatcharasangsuphap/gemlni-cli-backend/internal/routes"
 )
 
+// @title Durian Farm Management API
+// @version 1.0
+// @description API for managing durian farm plots, buyers, sales, maintenance logs, and dashboard analytics.
+// @host localhost:8080
+// @BasePath /api/v1
+// @schemes http
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name X-User-ID
 func main() {
 	// Load .env file
 	err := godotenv.Load()

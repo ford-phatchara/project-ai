@@ -4,7 +4,7 @@ import { DollarSign, Weight, TrendingUp, Leaf } from "lucide-react"
 import { StatCard } from "@/components/stat-card"
 import { PageHeader } from "@/components/page-header"
 import { GradeBadge } from "@/components/grade-badge"
-import { SALES, MONTHLY_REVENUE, getPlotName } from "@/lib/mock-data"
+import { SALES, MONTHLY_REVENUE } from "@/lib/mock-data"
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -17,59 +17,118 @@ const avgPrice = totalRevenue / totalWeight
 const gradeA = SALES.filter((s) => s.grade === "A").reduce((sum, s) => sum + s.total, 0)
 const gradeB = SALES.filter((s) => s.grade === "B").reduce((sum, s) => sum + s.total, 0)
 const PIE_DATA = [
-  { name: "Grade A", value: gradeA },
-  { name: "Grade B", value: gradeB },
+  { name: "เกรด A", value: gradeA },
+  { name: "เกรด B", value: gradeB },
 ]
 const PIE_COLORS = ["#3d7a45", "#c9a227"]
+const THAI_MONTHS: Record<string, string> = {
+  Jan: "ม.ค.",
+  Feb: "ก.พ.",
+  Mar: "มี.ค.",
+  Apr: "เม.ย.",
+  May: "พ.ค.",
+  Jun: "มิ.ย.",
+  Jul: "ก.ค.",
+  Aug: "ส.ค.",
+  Sep: "ก.ย.",
+  Oct: "ต.ค.",
+  Nov: "พ.ย.",
+  Dec: "ธ.ค.",
+}
+const THAI_PLOT_NAMES: Record<string, string> = {
+  P1: "แปลง A - เนินเขา",
+  P2: "แปลง B - หุบเขา",
+  P3: "แปลง C - สันเขาตะวันออก",
+  P4: "แปลง D - ทุ่งด้านเหนือ",
+}
 
 const recentSales = [...SALES].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5)
 
 function formatRM(val: number) {
-  return `RM ${val.toLocaleString()}`
+  return `${val.toLocaleString("th-TH")} บาท`
+}
+
+function formatRevenueInThousands(val: number) {
+  return `${(val).toLocaleString("th-TH", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })} บาท`
+}
+
+function formatWeight(val: number) {
+  return `${val.toLocaleString("th-TH")} กก.`
+}
+
+function formatMonth(month: string) {
+  return THAI_MONTHS[month] ?? month
+}
+
+function formatPlotName(plotId: string) {
+  return THAI_PLOT_NAMES[plotId] ?? plotId
+}
+
+function formatSaleDate(date: string) {
+  const [year, month, day] = date.split("-").map(Number)
+
+  return new Intl.DateTimeFormat("th-TH-u-ca-gregory", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day))
 }
 
 export default function DashboardPage() {
   return (
     <div>
       <PageHeader
-        title="Dashboard"
-        subtitle={`Season 2024 overview`}
+        title="แดชบอร์ด"
+        subtitle="ภาพรวมฤดูกาล 2024"
       />
 
       <div className="px-4 lg:px-8 flex flex-col gap-4">
         {/* Stat Cards */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <StatCard
-            label="Total Revenue"
-            value={`RM ${(totalRevenue / 1000).toFixed(1)}k`}
-            sub="2024 season"
+            label="รายได้รวม"
+            value={formatRevenueInThousands(totalRevenue)}
+            sub="ฤดูกาล 2026"
             icon={<DollarSign className="w-4 h-4 text-primary" />}
             accent
           />
           <StatCard
-            label="Total Weight Sold"
-            value={`${totalWeight.toLocaleString()} kg`}
-            sub="All grades"
+            label="น้ำหนักขายรวม"
+            value={formatWeight(totalWeight)}
+            sub="ทุกเกรด"
             icon={<Weight className="w-4 h-4 text-muted-foreground" />}
           />
           <StatCard
-            label="Avg. Price / kg"
-            value={`RM ${avgPrice.toFixed(2)}`}
-            sub="Blended average"
+            label="ราคาเฉลี่ย / กก."
+            value={`${avgPrice.toFixed(2)} บาท`}
+            sub="ค่าเฉลี่ยรวม"
             icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
           />
         </div>
 
         {/* Monthly Revenue Chart */}
         <div className="bg-card rounded-2xl border border-border shadow-sm p-4">
-          <p className="text-sm font-semibold text-foreground mb-4">Monthly Revenue (RM)</p>
+          <p className="text-sm font-semibold text-foreground mb-4">รายได้รายเดือน (RM)</p>
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={MONTHLY_REVENUE} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
-              <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => `${v / 1000}k`} />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 11 }}
+                stroke="var(--muted-foreground)"
+                tickFormatter={formatMonth}
+              />
+              <YAxis
+                tick={{ fontSize: 11 }}
+                stroke="var(--muted-foreground)"
+                tickFormatter={(v) => `${(v / 1000).toLocaleString("th-TH", { maximumFractionDigits: 1 })} พัน`}
+              />
               <Tooltip
-                formatter={(val: number) => [`RM ${val.toLocaleString()}`, "Revenue"]}
+                labelFormatter={(label) => formatMonth(String(label))}
+                formatter={(val: number) => [formatRM(val), "รายได้"]}
                 contentStyle={{ borderRadius: "0.75rem", border: "1px solid var(--border)", background: "var(--card)", color: "var(--foreground)" }}
               />
               <Line type="monotone" dataKey="revenue" stroke="var(--color-primary)" strokeWidth={2.5} dot={{ r: 3, fill: "var(--color-primary)" }} />
@@ -79,7 +138,7 @@ export default function DashboardPage() {
 
         {/* Grade Breakdown */}
         <div className="bg-card rounded-2xl border border-border shadow-sm p-4">
-          <p className="text-sm font-semibold text-foreground mb-2">Revenue by Grade</p>
+          <p className="text-sm font-semibold text-foreground mb-2">รายได้แยกตามเกรด</p>
           <div className="flex items-center justify-center">
             <ResponsiveContainer width="100%" height={180}>
               <PieChart>
@@ -98,7 +157,7 @@ export default function DashboardPage() {
                 </Pie>
                 <Legend iconType="circle" iconSize={10} formatter={(val) => <span className="text-xs text-foreground">{val}</span>} />
                 <Tooltip
-                  formatter={(val: number) => [`RM ${val.toLocaleString()}`, ""]}
+                  formatter={(val: number) => [formatRM(val), ""]}
                   contentStyle={{ borderRadius: "0.75rem", border: "1px solid var(--border)", background: "var(--card)", color: "var(--foreground)" }}
                 />
               </PieChart>
@@ -109,8 +168,8 @@ export default function DashboardPage() {
         {/* Recent Sales */}
         <div className="bg-card rounded-2xl border border-border shadow-sm p-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-foreground">Recent Sales</p>
-            <a href="/sales" className="text-xs text-primary font-medium">View all</a>
+            <p className="text-sm font-semibold text-foreground">รายการขายล่าสุด</p>
+            <a href="/sales" className="text-xs text-primary font-medium">ดูทั้งหมด</a>
           </div>
           <div className="flex flex-col gap-2">
             {recentSales.map((sale) => (
@@ -120,8 +179,8 @@ export default function DashboardPage() {
                     <Leaf className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">{getPlotName(sale.plot)}</p>
-                    <p className="text-xs text-muted-foreground">{sale.date} · {sale.weightKg} kg</p>
+                    <p className="text-sm font-medium text-foreground">{formatPlotName(sale.plot)}</p>
+                    <p className="text-xs text-muted-foreground">{formatSaleDate(sale.date)} · {formatWeight(sale.weightKg)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">

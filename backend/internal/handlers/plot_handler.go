@@ -32,6 +32,23 @@ func (h *PlotHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	plots.DELETE("/:id", h.Delete)
 }
 
+// List godoc
+// @Summary List plots
+// @Description Returns a paginated list of plots for the current user.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param page query int false "Page number"
+// @Param limit query int false "Page size"
+// @Param sort query string false "Sort field, prefix with - for descending"
+// @Param search query string false "Search term"
+// @Success 200 {object} dto.APIResponse{data=[]dto.PlotResponse,meta=dto.PaginationMeta}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots [get]
 func (h *PlotHandler) List(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -57,6 +74,21 @@ func (h *PlotHandler) List(c *gin.Context) {
 	})
 }
 
+// Get godoc
+// @Summary Get a plot
+// @Description Returns one plot by ID for the current user.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Success 200 {object} dto.APIResponse{data=dto.PlotResponse}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id} [get]
 func (h *PlotHandler) Get(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -80,6 +112,21 @@ func (h *PlotHandler) Get(c *gin.Context) {
 	})
 }
 
+// Create godoc
+// @Summary Create a plot
+// @Description Creates a plot for the current user.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param request body dto.CreatePlotRequest true "Plot payload"
+// @Success 201 {object} dto.APIResponse{data=dto.PlotResponse}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 422 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots [post]
 func (h *PlotHandler) Create(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -106,6 +153,23 @@ func (h *PlotHandler) Create(c *gin.Context) {
 	})
 }
 
+// Update godoc
+// @Summary Update a plot
+// @Description Updates a plot by ID for the current user.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Param request body dto.UpdatePlotRequest true "Plot payload"
+// @Success 200 {object} dto.APIResponse{data=dto.PlotResponse}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 422 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id} [put]
 func (h *PlotHandler) Update(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -137,6 +201,22 @@ func (h *PlotHandler) Update(c *gin.Context) {
 	})
 }
 
+// Delete godoc
+// @Summary Delete a plot
+// @Description Deletes a plot by ID for the current user.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Success 200 {object} dto.APIResponse{data=dto.DeletedPlotResponse}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 409 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id} [delete]
 func (h *PlotHandler) Delete(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -160,6 +240,32 @@ func (h *PlotHandler) Delete(c *gin.Context) {
 	})
 }
 
+// Sales godoc
+// @Summary List plot sales
+// @Description Returns paginated sales for a plot.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Param page query int false "Page number"
+// @Param limit query int false "Page size"
+// @Param sort query string false "Sort field, prefix with - for descending"
+// @Param grade query string false "Sale grade"
+// @Param buyer_id query string false "Buyer UUID"
+// @Param from query string false "Start date (YYYY-MM-DD)"
+// @Param to query string false "End date (YYYY-MM-DD)"
+// @Param min_weight query number false "Minimum weight in kg"
+// @Param max_weight query number false "Maximum weight in kg"
+// @Param min_price query number false "Minimum price per kg"
+// @Param max_price query number false "Maximum price per kg"
+// @Success 200 {object} dto.APIResponse{data=[]dto.SaleResponse,meta=dto.PaginationMeta}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id}/sales [get]
 func (h *PlotHandler) Sales(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -186,6 +292,27 @@ func (h *PlotHandler) Sales(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.APIResponse{Success: true, Data: sales, Meta: &meta})
 }
 
+// Maintenance godoc
+// @Summary List plot maintenance logs
+// @Description Returns paginated maintenance logs for a plot.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Param page query int false "Page number"
+// @Param limit query int false "Page size"
+// @Param sort query string false "Sort field, prefix with - for descending"
+// @Param activity_type query string false "Activity type"
+// @Param from query string false "Start date (YYYY-MM-DD)"
+// @Param to query string false "End date (YYYY-MM-DD)"
+// @Success 200 {object} dto.APIResponse{data=[]dto.MaintenanceResponse,meta=dto.PaginationMeta}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id}/maintenance [get]
 func (h *PlotHandler) Maintenance(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {
@@ -212,6 +339,23 @@ func (h *PlotHandler) Maintenance(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.APIResponse{Success: true, Data: logs, Meta: &meta})
 }
 
+// Stats godoc
+// @Summary Get plot stats
+// @Description Returns sales and maintenance statistics for a plot.
+// @Tags plots
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-User-ID header string true "User UUID"
+// @Param id path string true "Plot UUID"
+// @Param from query string false "Start date (YYYY-MM-DD)"
+// @Param to query string false "End date (YYYY-MM-DD)"
+// @Success 200 {object} dto.APIResponse{data=dto.PlotStatsResponse}
+// @Failure 400 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 401 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 404 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Failure 500 {object} dto.APIResponse{error=dto.ErrorResponse}
+// @Router /plots/{id}/stats [get]
 func (h *PlotHandler) Stats(c *gin.Context) {
 	userID, ok := currentUserID(c)
 	if !ok {

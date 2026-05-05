@@ -1,0 +1,2935 @@
+basePath: /api/v1
+definitions:
+  dto.APIResponse:
+    properties:
+      data: {}
+      error:
+        $ref: '#/definitions/dto.ErrorResponse'
+      meta:
+        $ref: '#/definitions/dto.PaginationMeta'
+      success:
+        type: boolean
+    type: object
+  dto.BuyerResponse:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      notes:
+        type: string
+      phone:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.BuyerSummaryResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+  dto.CreateBuyerRequest:
+    properties:
+      address:
+        type: string
+      contact_email:
+        type: string
+      contact_name:
+        type: string
+      contact_phone:
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 150
+        minLength: 1
+        type: string
+      notes:
+        type: string
+      phone:
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreateMaintenanceRequest:
+    properties:
+      activity_date:
+        type: string
+      activity_type:
+        enum:
+        - watering
+        - fertilizing
+        - pruning
+        - pest_control
+        - harvesting
+        type: string
+      duration_minutes:
+        minimum: 0
+        type: integer
+      notes:
+        type: string
+      plot_id:
+        type: string
+      quantity:
+        type: number
+      quantity_unit:
+        type: string
+    required:
+    - activity_date
+    - activity_type
+    - plot_id
+    type: object
+  dto.CreatePlotRequest:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      notes:
+        type: string
+      size_rai:
+        type: number
+      tree_count:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - size_rai
+    type: object
+  dto.CreateSaleRequest:
+    properties:
+      buyer_id:
+        type: string
+      grade:
+        enum:
+        - A
+        - B
+        type: string
+      notes:
+        type: string
+      plot_id:
+        type: string
+      price_per_kg:
+        type: number
+      sale_date:
+        type: string
+      weight_kg:
+        type: number
+    required:
+    - grade
+    - plot_id
+    - price_per_kg
+    - sale_date
+    - weight_kg
+    type: object
+  dto.DashboardActivityResponse:
+    properties:
+      recent_sales:
+        items:
+          $ref: '#/definitions/dto.DashboardRecentSaleResponse'
+        type: array
+      upcoming_maintenance:
+        items:
+          $ref: '#/definitions/dto.DashboardUpcomingMaintenanceRecord'
+        type: array
+    type: object
+  dto.DashboardComparisonResponse:
+    properties:
+      revenue_change_percent:
+        type: number
+      weight_change_percent:
+        type: number
+    type: object
+  dto.DashboardGradeResponse:
+    properties:
+      percentage:
+        type: number
+      weight_kg:
+        type: number
+    type: object
+  dto.DashboardRecentSaleResponse:
+    properties:
+      grade:
+        $ref: '#/definitions/models.Grade'
+      id:
+        type: string
+      plot_name:
+        type: string
+      sale_date:
+        type: string
+      total_price:
+        type: number
+      weight_kg:
+        type: number
+    type: object
+  dto.DashboardResponse:
+    properties:
+      comparison:
+        $ref: '#/definitions/dto.DashboardComparisonResponse'
+      grade_distribution:
+        additionalProperties:
+          $ref: '#/definitions/dto.DashboardGradeResponse'
+        type: object
+      period:
+        $ref: '#/definitions/dto.PeriodResponse'
+      recent_sales:
+        items:
+          $ref: '#/definitions/dto.DashboardRecentSaleResponse'
+        type: array
+      stats:
+        $ref: '#/definitions/dto.DashboardStatsResponse'
+      top_plots:
+        items:
+          $ref: '#/definitions/dto.DashboardTopPlotResponse'
+        type: array
+      upcoming_maintenance:
+        items:
+          $ref: '#/definitions/dto.DashboardUpcomingMaintenanceRecord'
+        type: array
+    type: object
+  dto.DashboardStatsResponse:
+    properties:
+      average_price_per_kg:
+        type: number
+      total_revenue:
+        type: number
+      total_weight_kg:
+        type: number
+      transaction_count:
+        type: integer
+    type: object
+  dto.DashboardTopPlotResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      revenue:
+        type: number
+    type: object
+  dto.DashboardUpcomingMaintenanceRecord:
+    properties:
+      activity_date:
+        type: string
+      activity_type:
+        $ref: '#/definitions/models.ActivityType'
+      id:
+        type: string
+      plot_name:
+        type: string
+    type: object
+  dto.DeletedBuyerResponse:
+    properties:
+      deleted:
+        type: boolean
+      id:
+        type: string
+    type: object
+  dto.DeletedMaintenanceResponse:
+    properties:
+      deleted:
+        type: boolean
+      id:
+        type: string
+    type: object
+  dto.DeletedPlotResponse:
+    properties:
+      deleted:
+        type: boolean
+      id:
+        type: string
+    type: object
+  dto.DeletedSaleResponse:
+    properties:
+      deleted:
+        type: boolean
+      id:
+        type: string
+    type: object
+  dto.EntitySummaryResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.ErrorResponse:
+    properties:
+      code:
+        type: string
+      details:
+        items:
+          $ref: '#/definitions/dto.ValidationError'
+        type: array
+      message:
+        type: string
+      request_id:
+        type: string
+    type: object
+  dto.GradeSummaryResponse:
+    properties:
+      percentage:
+        type: number
+      revenue:
+        type: number
+      weight_kg:
+        type: number
+    type: object
+  dto.MaintenanceResponse:
+    properties:
+      activity_date:
+        type: string
+      activity_type:
+        $ref: '#/definitions/models.ActivityType'
+      created_at:
+        type: string
+      duration_minutes:
+        type: integer
+      id:
+        type: string
+      notes:
+        type: string
+      plot:
+        $ref: '#/definitions/dto.EntitySummaryResponse'
+      quantity:
+        type: number
+      quantity_unit:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.PaginationMeta:
+    properties:
+      has_next:
+        type: boolean
+      has_prev:
+        type: boolean
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  dto.PeriodResponse:
+    properties:
+      from:
+        type: string
+      to:
+        type: string
+    type: object
+  dto.PlotGradeStatsResponse:
+    properties:
+      revenue:
+        type: number
+      weight_kg:
+        type: number
+    type: object
+  dto.PlotResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      notes:
+        type: string
+      size_rai:
+        type: number
+      tree_count:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  dto.PlotStatsMaintenanceResponse:
+    properties:
+      fertilizing_count:
+        type: integer
+      harvesting_count:
+        type: integer
+      pest_control_count:
+        type: integer
+      pruning_count:
+        type: integer
+      total_activities:
+        type: integer
+      watering_count:
+        type: integer
+    type: object
+  dto.PlotStatsResponse:
+    properties:
+      maintenance:
+        $ref: '#/definitions/dto.PlotStatsMaintenanceResponse'
+      period:
+        $ref: '#/definitions/dto.PeriodResponse'
+      plot_id:
+        type: string
+      plot_name:
+        type: string
+      sales:
+        $ref: '#/definitions/dto.PlotStatsSalesResponse'
+    type: object
+  dto.PlotStatsSalesResponse:
+    properties:
+      average_price_per_kg:
+        type: number
+      grade_breakdown:
+        additionalProperties:
+          $ref: '#/definitions/dto.PlotGradeStatsResponse'
+        type: object
+      total_revenue:
+        type: number
+      total_weight_kg:
+        type: number
+      transaction_count:
+        type: integer
+    type: object
+  dto.SaleResponse:
+    properties:
+      buyer:
+        $ref: '#/definitions/dto.BuyerSummaryResponse'
+      created_at:
+        type: string
+      grade:
+        $ref: '#/definitions/models.Grade'
+      id:
+        type: string
+      notes:
+        type: string
+      plot:
+        $ref: '#/definitions/dto.EntitySummaryResponse'
+      price_per_kg:
+        type: number
+      sale_date:
+        type: string
+      total_price:
+        type: number
+      updated_at:
+        type: string
+      weight_kg:
+        type: number
+    type: object
+  dto.SalesSummaryResponse:
+    properties:
+      by_grade:
+        additionalProperties:
+          $ref: '#/definitions/dto.GradeSummaryResponse'
+        type: object
+      period:
+        $ref: '#/definitions/dto.PeriodResponse'
+      timeline:
+        items:
+          $ref: '#/definitions/dto.SalesTimelinePointResponse'
+        type: array
+      totals:
+        $ref: '#/definitions/dto.SalesTotalsResponse'
+    type: object
+  dto.SalesTimelinePointResponse:
+    properties:
+      period:
+        type: string
+      revenue:
+        type: number
+      transaction_count:
+        type: integer
+      weight_kg:
+        type: number
+    type: object
+  dto.SalesTotalsResponse:
+    properties:
+      average_price_per_kg:
+        type: number
+      revenue:
+        type: number
+      transaction_count:
+        type: integer
+      weight_kg:
+        type: number
+    type: object
+  dto.UpdateBuyerRequest:
+    properties:
+      address:
+        type: string
+      contact_email:
+        type: string
+      contact_name:
+        type: string
+      contact_phone:
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 150
+        minLength: 1
+        type: string
+      notes:
+        type: string
+      phone:
+        type: string
+    required:
+    - name
+    type: object
+  dto.UpdateMaintenanceRequest:
+    properties:
+      activity_date:
+        type: string
+      activity_type:
+        enum:
+        - watering
+        - fertilizing
+        - pruning
+        - pest_control
+        - harvesting
+        type: string
+      duration_minutes:
+        minimum: 0
+        type: integer
+      notes:
+        type: string
+      plot_id:
+        type: string
+      quantity:
+        type: number
+      quantity_unit:
+        type: string
+    required:
+    - activity_date
+    - activity_type
+    - plot_id
+    type: object
+  dto.UpdatePlotRequest:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      notes:
+        type: string
+      size_rai:
+        type: number
+      tree_count:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - size_rai
+    type: object
+  dto.UpdateSaleRequest:
+    properties:
+      buyer_id:
+        type: string
+      grade:
+        enum:
+        - A
+        - B
+        type: string
+      notes:
+        type: string
+      plot_id:
+        type: string
+      price_per_kg:
+        type: number
+      sale_date:
+        type: string
+      weight_kg:
+        type: number
+    required:
+    - grade
+    - plot_id
+    - price_per_kg
+    - sale_date
+    - weight_kg
+    type: object
+  dto.ValidationError:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+  models.ActivityType:
+    enum:
+    - watering
+    - fertilizing
+    - pruning
+    - pest_control
+    - harvesting
+    type: string
+    x-enum-varnames:
+    - ActivityWatering
+    - ActivityFertilizing
+    - ActivityPruning
+    - ActivityPestControl
+    - ActivityHarvesting
+  models.Grade:
+    enum:
+    - A
+    - B
+    type: string
+    x-enum-comments:
+      GradeA: Premium quality
+      GradeB: Standard quality
+    x-enum-descriptions:
+    - Premium quality
+    - Standard quality
+    x-enum-varnames:
+    - GradeA
+    - GradeB
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing durian farm plots, buyers, sales, maintenance logs,
+    and dashboard analytics.
+  title: Durian Farm Management API
+  version: "1.0"
+paths:
+  /buyers:
+    get:
+      consumes:
+      - application/json
+      description: Returns a paginated list of buyers for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.BuyerResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List buyers
+      tags:
+      - buyers
+    post:
+      consumes:
+      - application/json
+      description: Creates a buyer for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Buyer payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBuyerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.BuyerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a buyer
+      tags:
+      - buyers
+  /buyers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a buyer by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Buyer UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DeletedBuyerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a buyer
+      tags:
+      - buyers
+    get:
+      consumes:
+      - application/json
+      description: Returns one buyer by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Buyer UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.BuyerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a buyer
+      tags:
+      - buyers
+    put:
+      consumes:
+      - application/json
+      description: Updates a buyer by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Buyer UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Buyer payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBuyerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.BuyerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update a buyer
+      tags:
+      - buyers
+  /buyers/{id}/sales:
+    get:
+      consumes:
+      - application/json
+      description: Returns paginated sales for a buyer.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Buyer UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Plot UUID
+        in: query
+        name: plot_id
+        type: string
+      - description: Sale grade
+        in: query
+        name: grade
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Minimum weight in kg
+        in: query
+        name: min_weight
+        type: number
+      - description: Maximum weight in kg
+        in: query
+        name: max_weight
+        type: number
+      - description: Minimum price per kg
+        in: query
+        name: min_price
+        type: number
+      - description: Maximum price per kg
+        in: query
+        name: max_price
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SaleResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List buyer sales
+      tags:
+      - buyers
+  /dashboard:
+    get:
+      consumes:
+      - application/json
+      description: Returns dashboard overview metrics, recent sales, top plots, and
+        upcoming maintenance for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DashboardResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get dashboard overview
+      tags:
+      - dashboard
+  /dashboard/activity:
+    get:
+      consumes:
+      - application/json
+      description: Returns recent sales and upcoming maintenance activity for the
+        current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DashboardActivityResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get dashboard activity
+      tags:
+      - dashboard
+  /dashboard/revenue:
+    get:
+      consumes:
+      - application/json
+      description: Returns revenue summary analytics for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SalesSummaryResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get dashboard revenue
+      tags:
+      - dashboard
+  /maintenance:
+    get:
+      consumes:
+      - application/json
+      description: Returns a paginated list of maintenance logs for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Plot UUID
+        in: query
+        name: plot_id
+        type: string
+      - description: Activity type
+        in: query
+        name: activity_type
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.MaintenanceResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List maintenance logs
+      tags:
+      - maintenance
+    post:
+      consumes:
+      - application/json
+      description: Creates a maintenance log for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Maintenance payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateMaintenanceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a maintenance log
+      tags:
+      - maintenance
+  /maintenance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a maintenance log by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Maintenance UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DeletedMaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a maintenance log
+      tags:
+      - maintenance
+    get:
+      consumes:
+      - application/json
+      description: Returns one maintenance log by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Maintenance UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a maintenance log
+      tags:
+      - maintenance
+    put:
+      consumes:
+      - application/json
+      description: Updates a maintenance log by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Maintenance UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Maintenance payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateMaintenanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.MaintenanceResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update a maintenance log
+      tags:
+      - maintenance
+  /maintenance/upcoming:
+    get:
+      consumes:
+      - application/json
+      description: Returns upcoming maintenance logs for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Maximum number of logs
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.MaintenanceResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List upcoming maintenance
+      tags:
+      - maintenance
+  /plots:
+    get:
+      consumes:
+      - application/json
+      description: Returns a paginated list of plots for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.PlotResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List plots
+      tags:
+      - plots
+    post:
+      consumes:
+      - application/json
+      description: Creates a plot for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePlotRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PlotResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a plot
+      tags:
+      - plots
+  /plots/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a plot by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DeletedPlotResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "409":
+          description: Conflict
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a plot
+      tags:
+      - plots
+    get:
+      consumes:
+      - application/json
+      description: Returns one plot by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PlotResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a plot
+      tags:
+      - plots
+    put:
+      consumes:
+      - application/json
+      description: Updates a plot by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Plot payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePlotRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PlotResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update a plot
+      tags:
+      - plots
+  /plots/{id}/maintenance:
+    get:
+      consumes:
+      - application/json
+      description: Returns paginated maintenance logs for a plot.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Activity type
+        in: query
+        name: activity_type
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.MaintenanceResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List plot maintenance logs
+      tags:
+      - plots
+  /plots/{id}/sales:
+    get:
+      consumes:
+      - application/json
+      description: Returns paginated sales for a plot.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Sale grade
+        in: query
+        name: grade
+        type: string
+      - description: Buyer UUID
+        in: query
+        name: buyer_id
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Minimum weight in kg
+        in: query
+        name: min_weight
+        type: number
+      - description: Maximum weight in kg
+        in: query
+        name: max_weight
+        type: number
+      - description: Minimum price per kg
+        in: query
+        name: min_price
+        type: number
+      - description: Maximum price per kg
+        in: query
+        name: max_price
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SaleResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List plot sales
+      tags:
+      - plots
+  /plots/{id}/stats:
+    get:
+      consumes:
+      - application/json
+      description: Returns sales and maintenance statistics for a plot.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Plot UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PlotStatsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get plot stats
+      tags:
+      - plots
+  /sales:
+    get:
+      consumes:
+      - application/json
+      description: Returns a paginated list of sales for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field, prefix with - for descending
+        in: query
+        name: sort
+        type: string
+      - description: Plot UUID
+        in: query
+        name: plot_id
+        type: string
+      - description: Sale grade
+        in: query
+        name: grade
+        type: string
+      - description: Buyer UUID
+        in: query
+        name: buyer_id
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Minimum weight in kg
+        in: query
+        name: min_weight
+        type: number
+      - description: Maximum weight in kg
+        in: query
+        name: max_weight
+        type: number
+      - description: Minimum price per kg
+        in: query
+        name: min_price
+        type: number
+      - description: Maximum price per kg
+        in: query
+        name: max_price
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SaleResponse'
+                  type: array
+                meta:
+                  $ref: '#/definitions/dto.PaginationMeta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: List sales
+      tags:
+      - sales
+    post:
+      consumes:
+      - application/json
+      description: Creates a sale for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Sale payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateSaleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SaleResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a sale
+      tags:
+      - sales
+  /sales/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a sale by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Sale UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.DeletedSaleResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a sale
+      tags:
+      - sales
+    get:
+      consumes:
+      - application/json
+      description: Returns one sale by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Sale UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SaleResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a sale
+      tags:
+      - sales
+    put:
+      consumes:
+      - application/json
+      description: Updates a sale by ID for the current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Sale UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Sale payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateSaleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SaleResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update a sale
+      tags:
+      - sales
+  /sales/export:
+    get:
+      consumes:
+      - application/json
+      description: Exports sales for the current user as a CSV file.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Export format, only csv is supported
+        in: query
+        name: format
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Plot UUID
+        in: query
+        name: plot_id
+        type: string
+      - description: Sale grade
+        in: query
+        name: grade
+        type: string
+      produces:
+      - text/csv
+      responses:
+        "200":
+          description: CSV file
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Export sales
+      tags:
+      - sales
+  /sales/summary:
+    get:
+      consumes:
+      - application/json
+      description: Returns sales totals, grade breakdown, and timeline data for the
+        current user.
+      parameters:
+      - description: User UUID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Grouping period
+        in: query
+        name: group_by
+        type: string
+      - description: Plot UUID
+        in: query
+        name: plot_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SalesSummaryResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.APIResponse'
+            - properties:
+                error:
+                  $ref: '#/definitions/dto.ErrorResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get sales summary
+      tags:
+      - sales
+schemes:
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: X-User-ID
+    type: apiKey
+swagger: "2.0"
