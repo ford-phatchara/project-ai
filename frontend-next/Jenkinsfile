@@ -5,20 +5,22 @@ pipeline {
     nodejs 'NodeJS 22'
   }
 
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
+  environment {
+    CI = 'true'
+  }
 
+  stages {
     stage('Install') {
       steps {
-        sh 'npm ci'
+        dir('frontend-next') {
+          sh 'corepack enable'
+          sh 'corepack prepare pnpm@10.33.0 --activate'
+          sh 'pnpm install --frozen-lockfile'
+        }
       }
     }
 
-   stage('Test') {
+    stage('Test') {
       steps {
         sh 'echo "No tests yet"'
       }
@@ -26,8 +28,10 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv('sonarqube-local') {
-          sh "${tool 'SonarScanner'}/bin/sonar-scanner"
+        dir('frontend-next') {
+          withSonarQubeEnv('sonarqube-local') {
+            sh "${tool 'SonarScanner'}/bin/sonar-scanner"
+          }
         }
       }
     }
@@ -42,7 +46,9 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'npm run build'
+        dir('frontend-next') {
+          sh 'pnpm build'
+        }
       }
     }
   }
