@@ -13,8 +13,7 @@ pipeline {
     stage('Install') {
       steps {
         dir('frontend-next') {
-          sh 'corepack enable'
-          sh 'corepack prepare pnpm@10.33.0 --activate'
+          sh 'npm install --global pnpm@10.33.0'
           sh 'pnpm install --frozen-lockfile'
         }
       }
